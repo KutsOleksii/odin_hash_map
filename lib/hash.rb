@@ -8,7 +8,7 @@ require_relative 'linked_list.rb'
 
 class HashMap
   def initialize
-    @capacity = 16
+    @capacity = 2
     @buckets = Array.new(@capacity) { LinkedList.new }
   end
 
@@ -21,6 +21,8 @@ class HashMap
   end
 
   def set(key, value)
+    expand if self.load_factor > 0.75
+
     bucket_index = hash(key) % @capacity
 
     if pointer = key_pointer(@buckets[bucket_index], key)
@@ -109,17 +111,22 @@ private
 
     return res
   end
+
+  def load_factor
+    @buckets.count { |ll| ll.head } / @capacity.to_f
+  end
+
+  def expand
+    puts 'Trying to EXPAND'
+    @buckets += Array.new(@capacity) { LinkedList.new }
+    @capacity <<= 1
+  end
 end
 
 
 my_hash = HashMap.new
-my_hash.set('name1', 'Lexus')
-my_hash.set('name2', 'Kuts')
-my_hash.set('name22', 'Oleksii')
-my_hash.set('name2', 'Oleksii Kuts')
-pp my_hash
-# pp my_hash.remove('name22').inspect
-# pp my_hash
+100.times {|i| my_hash.set("name#{rand(100)}", rand(10000).to_s)}
 pp my_hash.length
-pp my_hash.keys
-pp my_hash.values
+p my_hash.keys
+p my_hash.values
+pp my_hash
