@@ -1,10 +1,4 @@
 require_relative 'linked_list.rb'
-# attr_reader :value
-# attr_accessor :next_node
-# def initialize(value = nil)
-#   @value = value
-#   @next_node = nil
-# end
 
 class HashMap
   def initialize
